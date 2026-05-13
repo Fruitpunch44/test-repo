@@ -3,7 +3,7 @@ import csv
 from pypdf import PdfReader
 
 
-def extract_text_from_pdf(pdf_path: str):
+def extract_text_from_pdf(pdf_path: str)->str:
     """Extract text from PDF using pypdf"""
     reader = PdfReader(pdf_path)
     full_text = ""
@@ -156,7 +156,7 @@ def parse_regular_questions(text: str) -> list:
     return questions_data
 
 
-def parse_passage_questions(text: str):
+def parse_passage_questions(text: str)->List:
     """Parse passage-based questions (from passages I, II, III, IV)"""
     questions_data = []
 
