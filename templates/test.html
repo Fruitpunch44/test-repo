@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CBT Exam</title>
+
+<style>
+body {
+    font-family: Arial;
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+
+.box {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.option {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.option:hover {
+    background: #f5f5f5;
+}
+
+.nav {
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 15px;
+    margin-right: 10px;
+}
+
+.hidden {
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<h2>CBT Practice - {{ data.subject | upper }}</h2>
+
+<div id="counter"></div>
+
+<div class="box">
+
+    <!-- QUESTIONS LOOP (hidden, JS will switch between them) -->
+    <div id="questions">
+
+        {% if data.data is iterable and data.data is not string %}
+
+            {% for q in data.data %}
+
+                <div class="question hidden" data-id="{{ q.id }}" data-answer="{{ q.answer }}">
+
+                    <h3>{{ q.question }}</h3>
+
+                    {% if q.option.a %}
+                    <label class="option">
+                        <input type="radio" name="q{{ q.id }}" value="a">
+                        A. {{ q.option.a }}
+                    </label>
+                    {% endif %}
+
+                    {% if q.option.b %}
+                    <label class="option">
+                        <input type="radio" name="q{{ q.id }}" value="b">
+                        B. {{ q.option.b }}
+                    </label>
+                    {% endif %}
+
+                    {% if q.option.c %}
+                    <label class="option">
+                        <input type="radio" name="q{{ q.id }}" value="c">
+                        C. {{ q.option.c }}
+                    </label>
+                    {% endif %}
+
+                    {% if q.option.d %}
+                    <label class="option">
+                        <input type="radio" name="q{{ q.id }}" value="d">
+                        D. {{ q.option.d }}
+                    </label>
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <!-- SINGLE QUESTION MODE -->
+            <div class="question" data-id="{{ data.data.id }}" data-answer="{{ data.data.answer }}">
+
+                <h3>{{ data.data.question }}</h3>
+
+                <label class="option">
+                    <input type="radio" name="q{{ data.data.id }}" value="a">
+                    A. {{ data.data.option.a }}
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="q{{ data.data.id }}" value="b">
+                    B. {{ data.data.option.b }}
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="q{{ data.data.id }}" value="c">
+                    C. {{ data.data.option.c }}
+                </label>
+
+                <label class="option">
+                    <input type="radio" name="q{{ data.data.id }}" value="d">
+                    D. {{ data.data.option.d }}
+                </label>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+</div>
+
+<div class="nav">
+    <button onclick="prev()">Previous</button>
+    <button onclick="next()">Next</button>
+    <button onclick="submitExam()">Submit</button>
+</div>
+
+<script>
+
+let current = 0;
+let questions = document.querySelectorAll(".question");
+let answers = {};
+
+function showQuestion(index) {
+
+    questions.forEach(q => q.classList.add("hidden"));
+
+    questions[index].classList.remove("hidden");
+
+    document.getElementById("counter").innerText =
+        `Question ${index + 1} of ${questions.length}`;
+}
+
+function next() {
+    if (current < questions.length - 1) {
+        saveAnswer();
+        current++;
+        showQuestion(current);
+    }
+}
+
+function prev() {
+    if (current > 0) {
+        saveAnswer();
+        current--;
+        showQuestion(current);
+    }
+}
+
+function saveAnswer() {
+    let q = questions[current];
+    let id = q.dataset.id;
+    let selected = q.querySelector("input[type=radio]:checked");
+
+    if (selected) {
+        answers[id] = selected.value;
+    }
+}
+
+function submitExam() {
+
+    saveAnswer();
+
+    let score = 0;
+
+    questions.forEach(q => {
+
+        let id = q.dataset.id;
+        let correct = q.dataset.answer;
+
+        if (answers[id] === correct) {
+            score++;
+        }
+    });
+
+    alert(`Score: ${score} / ${questions.length}`);
+}
+
+// init
+showQuestion(0);
+
+</script>
+
+</body>
+</html>

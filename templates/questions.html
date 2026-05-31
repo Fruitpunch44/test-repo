@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Questions</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: lightgray;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Questions Table</h1>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Subject ID</th>
+            <th>Question</th>
+            <th>Option A</th>
+            <th>Option B</th>
+            <th>Option C</th>
+            <th>Option D</th>
+            <th>Correct Answer</th>
+        </tr>
+
+        {% for question in questions %}
+        <tr>
+            <td>{{ question[0] }}</td>
+            <td>{{ question[1] }}</td>
+            <td>{{ question[2] }}</td>
+            <td>{{ question[3] }}</td>
+            <td>{{ question[4] }}</td>
+            <td>{{ question[5] }}</td>
+            <td>{{ question[6] }}</td>
+            <td>{{ question[7] }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+</body>
+</html>
